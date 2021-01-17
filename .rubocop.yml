@@ -7,3 +7,7 @@ Style/Documentation:
 Layout/EmptyLinesAroundClassBody:
   Enabled: true
   EnforcedStyle: empty_lines
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/*

@@ -3,13 +3,12 @@
 require 'models/fake_class'
 
 RSpec.describe FakeClass do
-
   subject { described_class.new }
 
   describe '#attributes' do
     subject { described_class.attributes }
 
-    let(:attributes) { [:one, :two, :three] }
+    let(:attributes) { %i[one two three] }
 
     it 'contains the correct attributes' do
       expect(subject).to eq attributes
@@ -42,7 +41,6 @@ RSpec.describe FakeClass do
         expect(subject).to eq [Integer]
       end
     end
-
   end
 
   describe '#matching_type_for' do

@@ -73,6 +73,7 @@ module FormAttribute
 
     def read_attribute(name)
       raise UnknownAttributeName, name unless attributes.include? name
+
       value = instance_variable_get("@#{name}")
       value || default_for(name)
     end
