@@ -1,6 +1,92 @@
-require "form_attribute/version"
+# frozen_string_literal: true
+
+require 'form_attribute/version'
+require 'form_attribute/errors'
+require 'form_attribute/boolean'
 
 module FormAttribute
-  class Error < StandardError; end
-  # Your code goes here...
+  def self.extended(base)
+    base.instance_variable_set('@attrs', {})
+    base.include InstanceMethods
+  end
+
+  def attribute(name, type, options = {})
+    name = name.to_sym
+    default = options[:default]
+
+    @attrs[name] = {
+      type: [type].flatten,
+      default: default
+    }
+
+    matching_type_for(name, default)
+
+    define_method("#{name}=") { |value| write_attribute(name, value) }
+    define_method(name) { read_attribute(name) }
+  end
+
+  def attributes
+    @attrs.keys
+  end
+
+  def type_of(name)
+    attr(name)[:type]
+  end
+
+  def default_for(name)
+    attr(name)[:default]
+  end
+
+  def matching_type_for(name, value)
+    return true if value.nil?
+
+    type_of(name).each do |type|
+      return true if value.is_a? type
+    end
+    raise TypeError, "Value for #{name.inspect} is the wrong type"
+  end
+
+  private
+
+  def attr(name)
+    return @attrs[name] if @attrs[name]
+
+    raise UnknownAttributeName, name.inspect
+  end
+
+  module InstanceMethods
+    def initialize(**attributes)
+      attributes.each { |name, value| write_attribute(name, value) }
+    end
+
+    def inspect
+      attrs = attributes.map { |name| "#{name}: #{read_attribute(name).inspect}" }.join(', ')
+      "#<#{self.class} #{attrs}>"
+    end
+
+    private
+
+    def write_attribute(name, value)
+      matching_type_for(name, value)
+      instance_variable_set("@#{name}", value)
+    end
+
+    def read_attribute(name)
+      raise UnknownAttributeName, name unless attributes.include? name
+      value = instance_variable_get("@#{name}")
+      value || default_for(name)
+    end
+
+    def attributes
+      self.class.attributes
+    end
+
+    def matching_type_for(name, value)
+      self.class.matching_type_for(name, value)
+    end
+
+    def default_for(name)
+      self.class.default_for(name)
+    end
+  end
 end
