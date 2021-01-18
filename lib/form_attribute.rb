@@ -8,21 +8,20 @@ module FormAttribute
   def self.extended(base)
     base.instance_variable_set('@attrs', {})
     base.include InstanceMethods
+    base.define_method('initialize') do |**attributes|
+      write_many(**attributes)
+    end
   end
 
   def attribute(name, type, options = {})
     name = name.to_sym
     default = options[:default]
 
-    @attrs[name] = {
-      type: [type].flatten,
-      default: default
-    }
+    init_attribute(name, type, default)
 
     matching_type_for(name, default)
 
-    define_method("#{name}=") { |value| write_attribute(name, value) }
-    define_method(name) { read_attribute(name) }
+    define_accessors(name)
   end
 
   def attributes
@@ -48,23 +47,36 @@ module FormAttribute
 
   private
 
+  def init_attribute(name, type, default)
+    @attrs[name] = {
+      type: [type].flatten,
+      default: default
+    }
+  end
+
+  def define_accessors(name)
+    define_method("#{name}=") { |value| write_attribute(name, value) }
+    define_method(name) { read_attribute(name) }
+  end
+
   def attr(name)
-    return @attrs[name] if @attrs[name]
+    attribute = @attrs[name]
+    return attribute if attribute
 
     raise UnknownAttributeName, name.inspect
   end
 
   module InstanceMethods
-    def initialize(**attributes)
-      attributes.each { |name, value| write_attribute(name, value) }
-    end
-
     def inspect
       attrs = attributes.map { |name| "#{name}: #{read_attribute(name).inspect}" }.join(', ')
       "#<#{self.class} #{attrs}>"
     end
 
     private
+
+    def write_many(**attributes)
+      attributes.each { |name, value| write_attribute(name, value) }
+    end
 
     def write_attribute(name, value)
       matching_type_for(name, value)

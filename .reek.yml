@@ -1,0 +1,7 @@
+detectors:
+  IrresponsibleModule:
+    enabled: false
+
+  NilCheck:
+    exclude:
+      - "FormAttribute#matching_type_for"
