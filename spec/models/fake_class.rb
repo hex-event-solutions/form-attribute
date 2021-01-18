@@ -5,7 +5,7 @@ class FakeClass
   extend FormAttribute
 
   attribute :one, String, default: 'one'
-  attribute :two, Boolean, default: false
+  attribute :two, Float, default: 1.2
   attribute :three, Integer
 
 end

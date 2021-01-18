@@ -2,7 +2,6 @@
 
 require 'form_attribute/version'
 require 'form_attribute/errors'
-require 'form_attribute/boolean'
 
 module FormAttribute
   def self.extended(base)

@@ -30,7 +30,7 @@ RSpec.describe FakeClass do
       let(:field) { :two }
 
       it 'returns Boolean' do
-        expect(subject).to eq [Boolean]
+        expect(subject).to eq [Float]
       end
     end
 
@@ -88,7 +88,7 @@ RSpec.describe FakeClass do
 
   it 'uses the supplied default values', :aggregate_failures do
     expect(subject.one).to eq 'one'
-    expect(subject.two).to eq false
+    expect(subject.two).to eq 1.2
     expect(subject.three).to eq nil
   end
 
@@ -96,7 +96,7 @@ RSpec.describe FakeClass do
     subject { described_class.new(**params) }
 
     context 'when the parameters are only defined attributes' do
-      let(:params) { { one: 'won', two: true, three: 3 } }
+      let(:params) { { one: 'won', two: 2.2, three: 3 } }
 
       it 'does not raise an error' do
         expect { subject }.not_to raise_error
@@ -104,13 +104,13 @@ RSpec.describe FakeClass do
 
       it 'uses the supplied parameters', :aggregate_failures do
         expect(subject.one).to eq 'won'
-        expect(subject.two).to eq true
+        expect(subject.two).to eq 2.2
         expect(subject.three).to eq 3
       end
     end
 
     context 'when the parameters contain an undefined attribute' do
-      let(:params) { { one: 'won', two: true, three: 3, four: 4 } }
+      let(:params) { { one: 'won', two: 2.0, three: 3, four: 4 } }
 
       it 'raises an UnknownAttributeName error' do
         expect { subject }.to raise_error(UnknownAttributeName, ':four')
@@ -122,7 +122,7 @@ RSpec.describe FakeClass do
     subject { described_class.new.inspect }
 
     it 'returns the correct string' do
-      expect(subject).to eq '#<FakeClass one: "one", two: false, three: nil>'
+      expect(subject).to eq '#<FakeClass one: "one", two: 1.2, three: nil>'
     end
   end
 
