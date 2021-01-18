@@ -41,7 +41,7 @@ module FormAttribute
     type_of(name).each do |type|
       return true if value.is_a? type
     end
-    raise TypeError, "Value for #{name.inspect} is the wrong type"
+    raise TypeError, "#{value.inspect} for #{name.inspect} is the wrong type"
   end
 
   private

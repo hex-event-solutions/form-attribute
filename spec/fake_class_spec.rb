@@ -69,7 +69,7 @@ RSpec.describe FakeClass do
       let(:value) { 1 }
 
       it 'raises a TypeError' do
-        expect { subject }.to raise_error(TypeError, 'Value for :one is the wrong type')
+        expect { subject }.to raise_error(TypeError, '1 for :one is the wrong type')
       end
     end
 
