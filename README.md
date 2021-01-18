@@ -59,7 +59,8 @@ Person.type_of :contact
 => [String, Integer]
 ```
 
-The default value of an attribute can be read with `Class.default_for(<attribute>)`
+The default value of an attribute can be read with
+`Class.default_for(<attribute>)`
 
 ```ruby
 Person.default_for :role
@@ -119,4 +120,7 @@ The gem is available as open source under the terms of the
 Everyone interacting in the FormAttribute project's codebases, issue trackers,
 chat rooms and mailing lists is expected to follow the
 [code of conduct](https://github.com/hex-event-solutions/form_attribute/blob/master/CODE_OF_CONDUCT.md).
+
+```
+
 ```
