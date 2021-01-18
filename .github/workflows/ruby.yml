@@ -30,5 +30,7 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Run rubocop
       run: bundle exec rubocop
+    - name: Run reek
+      run: bundle exec reek
     - name: Run tests
       run: bundle exec rspec
